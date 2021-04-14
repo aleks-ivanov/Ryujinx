@@ -1,0 +1,27 @@
+name: CI/CD Pipeline
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  ci:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    outputs:
+      latest-version: ${{ steps.get_semantic_version.outputs.version_num }}
+    env:
+      GITHUB_RUN_NUMBER: ${{ github.run_number }}
+    steps:
+      - name: Checkout repository
+        id: checkout_repo
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Build solution
+        id: build_solution
+        shell: pwsh
+        run: |
+          dotnet build .\Ryujinx.sln -c Release
+
+# Built with ❤ by [Pipeline Foundation](https://pipeline.foundation)
