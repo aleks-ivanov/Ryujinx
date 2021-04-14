@@ -24,4 +24,10 @@ jobs:
         run: |
           dotnet build .\Ryujinx.sln -c Release
 
+      - name: Run unit tests
+        id: run_unit_tests
+        shell: pwsh
+        run: |
+          Get-ChildItem *.Tests*.csproj -recurse | ForEach-Object { dotnet test $PSItem.FullName }
+
 # Built with ❤ by [Pipeline Foundation](https://pipeline.foundation)
